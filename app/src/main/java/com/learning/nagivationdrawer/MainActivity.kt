@@ -10,45 +10,40 @@ import com.learning.nagivationdrawer.databinding.ActivityMainBinding
 import com.learning.nagivationdrawer.fragment.LogoutFragment
 import com.learning.nagivationdrawer.fragment.ProfileFragment
 import com.learning.nagivationdrawer.fragment.SettingFragment
+import com.learning.nagivationdrawer.util.replaceFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding : ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        binding.apply {
-            setContentView(root)
+        setContentView(binding.root)
+        setupToolbar()
+        replaceFragment(ProfileFragment())
             //Setting as Default Fragment
             var fragment : Fragment = ProfileFragment()
-            supportFragmentManager.beginTransaction().replace(R.id.fcHome, fragment).addToBackStack("").commit()
-            tbMain.apply {
-                title = "Sample"
-                setNavigationIcon(R.drawable.ic_menu)
-                //Toggle Listener
-                setOnClickListener { dlMain.open() }
-                //Nav Item Listener
-                nvMain.setNavigationItemSelectedListener {
-                    when(it.itemId){
-                        R.id.menu_profile -> {
-                            fragment = ProfileFragment()
-                            dlMain.close()
-                        }
-                        R.id.menu_setting -> {
-                            fragment = SettingFragment()
-                            dlMain.close()
-                        }
-                        R.id.menu_logout -> {
-                            fragment = LogoutFragment()
-                            dlMain.close()
-                        }
-                    }
-                    replaceFragment(fragment)
-                    true
-                }
+            replaceFragment(fragment)
+    }
+
+    private fun setupToolbar() = with(binding){
+        tbMain.apply {
+            title = "Sample"
+            setNavigationIcon(R.drawable.ic_menu)
+            setNavigationOnClickListener {
+                dlMain.open()
             }
         }
     }
-    private fun replaceFragment(fragment : Fragment){
-        supportFragmentManager.beginTransaction().replace(R.id.fcHome, fragment).addToBackStack("").commit()
+
+    private fun setupNavigationDrawer() = with(binding){
+        nvMain.setNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.menu_profile -> replaceFragment(ProfileFragment())
+                R.id.menu_setting -> replaceFragment(SettingFragment())
+                R.id.menu_logout -> replaceFragment(LogoutFragment())
+            }
+            dlMain.close()
+            true
+        }
     }
 }
