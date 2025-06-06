@@ -7,7 +7,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.learning.nagivationdrawer.databinding.ActivityMainBinding
-import com.learning.nagivationdrawer.fragment.LogoutFragment
 import com.learning.nagivationdrawer.fragment.ProfileFragment
 import com.learning.nagivationdrawer.fragment.SettingFragment
 import com.learning.nagivationdrawer.util.replaceFragment
@@ -20,9 +19,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         setupToolbar()
         replaceFragment(ProfileFragment())
-            //Setting as Default Fragment
-            var fragment : Fragment = ProfileFragment()
-            replaceFragment(fragment)
+        setupNavigationDrawer()
     }
 
     private fun setupToolbar() = with(binding){
@@ -40,7 +37,7 @@ class MainActivity : AppCompatActivity() {
             when (menuItem.itemId) {
                 R.id.menu_profile -> replaceFragment(ProfileFragment())
                 R.id.menu_setting -> replaceFragment(SettingFragment())
-                R.id.menu_logout -> replaceFragment(LogoutFragment())
+                R.id.menu_logout -> finish()
             }
             dlMain.close()
             true
